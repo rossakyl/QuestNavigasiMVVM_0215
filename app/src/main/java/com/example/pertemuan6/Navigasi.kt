@@ -8,3 +8,36 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.pertemuan6.view.FormIsian
 import com.example.pertemuan6.view.TampilData
+
+enum class Navigasi {
+    FormulirSaya,
+    Detail
+}
+
+@Composable
+fun DataApp(
+    navController: NavHostController = rememberNavController(),
+    cancelAndBackToFormulirSaya: (NavHostController) -> Unit
+){
+    Scaffold { isiRuang->
+        NavHost(
+            navController = navController,
+            startDestination = Navigasi.FormulirSaya.name,
+
+            modifier = Modifier.padding( paddingValues = isiRuang)){
+            composable(route = Navigasi.FormulirSaya.name){
+                FormIsian (
+                    //pilihanJK = JenisK.map { id -> konteks.resources.getString(id) },
+                    OnSubmitBtnClick = {
+                        navController.navigate( route = Navigasi.Detail.name)
+                    }
+                )
+            }
+            composable(route = Navigasi.Detail.name){
+                TampilData(
+                    onBackBtnClick = { cancelAndBackToFormulirSaya(navController)}
+                )
+            }
+        }
+    }
+}
